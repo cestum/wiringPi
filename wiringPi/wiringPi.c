@@ -311,8 +311,8 @@ static int sysFds [64] =
 } ;
 
 // ISR Data
-
-static void (*isrFunctions [64])(void) ;
+//Changed to support isntance member func as callbacks
+static void (*isrFunctions [64])(void *) ;
 
 
 // Doing it the Arduino way with lookup tables...
@@ -1874,7 +1874,7 @@ static void *interruptHandler (UNU void *arg)
  *********************************************************************************
  */
 
-int wiringPiISR (int pin, int mode, void (*function)(void))
+int wiringPiISR (int pin, int mode, void (*function)(void *), void* userData)
 {
   pthread_t threadId ;
   const char *modeS ;
@@ -1956,7 +1956,7 @@ int wiringPiISR (int pin, int mode, void (*function)(void))
 
   pthread_mutex_lock (&pinMutex) ;
     pinPass = pin ;
-    pthread_create (&threadId, NULL, interruptHandler, NULL) ;
+    pthread_create (&threadId, NULL, interruptHandler, userData) ;
     while (pinPass != -1)
       delay (1) ;
   pthread_mutex_unlock (&pinMutex) ;

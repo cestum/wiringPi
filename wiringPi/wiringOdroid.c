@@ -565,13 +565,13 @@ static void *interruptHandler (UNU void *arg)
 
 	for (;;)
 		if (waitForInterrupt (myPin, -1) > 0)
-			libwiring.isrFunctions [myPin] () ;
+			libwiring.isrFunctions [myPin] (arg) ;
 
 	return NULL ;
 }
 
 /*----------------------------------------------------------------------------*/
-int wiringPiISR (int pin, int mode, void (*function)(void))
+int wiringPiISR (int pin, int mode, void (*function)(void *), void* userData)
 {
 	pthread_t threadId;
 	const char *modeS;
@@ -663,7 +663,7 @@ int wiringPiISR (int pin, int mode, void (*function)(void))
 
 	pthread_mutex_lock (&pinMutex) ;
 	pinPass = GpioPin ;
-	pthread_create (&threadId, NULL, interruptHandler, NULL) ;
+	pthread_create (&threadId, NULL, interruptHandler, userData) ;
 	while (pinPass != -1)
 		delay (1) ;
 	pthread_mutex_unlock (&pinMutex) ;

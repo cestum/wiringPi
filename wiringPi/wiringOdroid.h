@@ -119,7 +119,7 @@ struct libodroid
 	unsigned int (*digitalReadByte)	(void);
 
 	/* ISR Function pointer */
-	void 	(*isrFunctions[256])(void);
+	void 	(*isrFunctions[256])(void *);
 
 	/* GPIO sysfs file discripter */
 	int 	sysFds[256];
