@@ -385,7 +385,7 @@ void doExport (int argc, char *argv [])
  *	to exit the program. Crude but effective.
  *********************************************************************************
  */
-static void wfi (void)	{ exit (0) ; }
+static void wfi (void* arg)	{ exit (0) ; }
 
 void doWfi (int argc, char *argv [])
 {
